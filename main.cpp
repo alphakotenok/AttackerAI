@@ -26,7 +26,8 @@ int main() {
         window.clear(sf::Color::White);
 
         camera.setViewOn(window);
-        bg.drawOn(window);
+
+        window.draw(bg);
 
         // Update the window
         window.display();

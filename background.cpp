@@ -24,9 +24,9 @@ Background::Background(sf::Vector2i gridSize, sf::Vector2f center) : gridSize(gr
     }
 }
 
-void Background::drawOn(sf::RenderWindow &window) {
-    window.draw(grass);
+void Background::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+    target.draw(grass, states);
     for (auto &line : gridLines) {
-        window.draw(line);
+        target.draw(line, states);
     }
 }
