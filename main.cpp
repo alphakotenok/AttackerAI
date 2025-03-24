@@ -1,13 +1,17 @@
+#include "background.hpp"
 #include "camera.hpp"
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode({800, 600}), "AttackerAI");
+
+    sf::ContextSettings settings;
+    settings.antiAliasingLevel = 8;
+
+    sf::RenderWindow window(sf::VideoMode({800, 600}), "AttackerAI", sf::Style::Default, sf::State::Windowed, settings);
     window.setFramerateLimit(60);
+
     Camera camera({0, 0}, {800, 600}, sf::Mouse::getPosition(window));
 
-    sf::CircleShape circle(50.f);
-    circle.setFillColor(sf::Color::Red);
-    circle.setPosition({-50.f, -50.f});
+    Background bg({45, 45}, {0, 0});
 
     sf::Clock clock;
     while (window.isOpen()) {
@@ -20,9 +24,9 @@ int main() {
         }
 
         window.clear(sf::Color::White);
-        camera.setView(window);
 
-        window.draw(circle);
+        camera.setViewOn(window);
+        bg.drawOn(window);
 
         // Update the window
         window.display();

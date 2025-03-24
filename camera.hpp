@@ -16,5 +16,5 @@ private:
 public:
     Camera(sf::Vector2f center, sf::Vector2f size, sf::Vector2i mousePos);
     void handleEvents(const std::optional<sf::Event> &event);
-    void setView(sf::RenderWindow &window);
+    void setViewOn(sf::RenderWindow &window);
 };

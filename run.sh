@@ -8,5 +8,6 @@ clang++ -o main -std=c++20 -I/opt/homebrew/include \
 -lsfml-network \
 main.cpp \
 camera.cpp \
+background.cpp \
 
 ./main

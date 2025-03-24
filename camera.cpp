@@ -38,6 +38,6 @@ void Camera::handleEvents(const std::optional<sf::Event> &event) {
     }
 }
 
-void Camera::setView(sf::RenderWindow &window) {
+void Camera::setViewOn(sf::RenderWindow &window) {
     window.setView(view);
 }
