@@ -25,7 +25,7 @@ void Camera::handleEvents(const std::optional<sf::Event> &event) {
         }
     }
     if (const auto wheel = event->getIf<sf::Event::MouseWheelScrolled>()) {
-        float zoom = std::exp(wheel->delta * ZOOM_FACTOR);
+        float zoom = std::exp(-wheel->delta * ZOOM_FACTOR);
         view.move({(windowSize.x / 2 - currentMousePos.x) * (zoom - 1) * totalZoom, (windowSize.y / 2 - currentMousePos.y) * (zoom - 1) * totalZoom});
 
         view.zoom(zoom);
