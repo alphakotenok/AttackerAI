@@ -1,6 +1,6 @@
-.clangd
-.clang-format
-run.sh
 *
 !/**/
 !*.*
+.clangd
+.clang-format
+run.sh
