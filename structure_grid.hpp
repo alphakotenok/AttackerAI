@@ -5,7 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include <list>
 
-class Grid : public sf::Drawable {
+class StuctureGrid : public sf::Drawable {
 private:
     sf::Vector2i size;
     std::list<std::unique_ptr<Structure>> structures;
@@ -13,7 +13,7 @@ private:
     Background &bg;
 
 public:
-    Grid(Background &bg);
+    StuctureGrid(Background &bg);
     bool place(Structure::Type type, sf::Vector2i topLeft); // returns false if couldn't place
     void remove(std::list<std::unique_ptr<Structure>>::iterator &structure);
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;

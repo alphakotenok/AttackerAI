@@ -14,13 +14,13 @@ int main() {
 
     Background bg({45, 45}, {0, 0});
 
-    Grid grid(bg);
+    StuctureGrid structureGrid(bg);
 
-    grid.place(Structure::WALL, {27, 27});
-    grid.place(Structure::WALL, {27, 26});
-    grid.place(Structure::WALL, {27, 25});
-    grid.place(Structure::WALL, {26, 27});
-    grid.place(Structure::WALL, {28, 27});
+    structureGrid.place(Structure::WALL, {27, 27});
+    structureGrid.place(Structure::WALL, {27, 26});
+    structureGrid.place(Structure::WALL, {27, 25});
+    structureGrid.place(Structure::WALL, {26, 27});
+    structureGrid.place(Structure::WALL, {28, 27});
 
     sf::Clock clock;
     while (window.isOpen()) {
@@ -32,12 +32,12 @@ int main() {
             camera.handleEvent(event);
         }
 
-        grid.update(deltaTime);
+        structureGrid.update(deltaTime);
 
         window.clear(sf::Color::White);
 
         window.draw(bg);
-        window.draw(grid);
+        window.draw(structureGrid);
 
         camera.setViewOn(window);
 
