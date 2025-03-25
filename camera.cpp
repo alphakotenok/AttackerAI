@@ -5,7 +5,7 @@ Camera::Camera(sf::Vector2f center, sf::Vector2f windowSize, sf::Vector2i mouseP
     view.setCenter(center);
 }
 
-void Camera::handleEvents(const std::optional<sf::Event> &event) {
+void Camera::handleEvent(const std::optional<sf::Event> &event) {
     if (const auto mouse = event->getIf<sf::Event::MouseMoved>()) {
         currentMousePos = mouse->position;
         if (isDragging) {

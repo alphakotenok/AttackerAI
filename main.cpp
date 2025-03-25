@@ -1,5 +1,6 @@
 #include "background.hpp"
 #include "camera.hpp"
+#include "grid.hpp"
 
 int main() {
 
@@ -13,21 +14,32 @@ int main() {
 
     Background bg({45, 45}, {0, 0});
 
+    Grid grid(bg);
+
+    grid.place(Structure::WALL, {27, 27});
+    grid.place(Structure::WALL, {27, 26});
+    grid.place(Structure::WALL, {27, 25});
+    grid.place(Structure::WALL, {26, 27});
+    grid.place(Structure::WALL, {28, 27});
+
     sf::Clock clock;
     while (window.isOpen()) {
-        sf::Time delta = clock.restart();
+        sf::Time deltaTime = clock.restart();
 
         while (const std::optional event = window.pollEvent()) {
             if (event->is<sf::Event::Closed>())
                 window.close();
-            camera.handleEvents(event);
+            camera.handleEvent(event);
         }
+
+        grid.update(deltaTime);
 
         window.clear(sf::Color::White);
 
-        camera.setViewOn(window);
-
         window.draw(bg);
+        window.draw(grid);
+
+        camera.setViewOn(window);
 
         // Update the window
         window.display();

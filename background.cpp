@@ -2,9 +2,9 @@
 
 Background::Background(sf::Vector2i gridSize, sf::Vector2f center) : gridSize(gridSize), center(center) {
 
-    grass.setSize({gridSize.x * CELL_SIZE, gridSize.y * CELL_SIZE});
+    grass.setSize((sf::Vector2f)gridSize * CELL_SIZE);
     grass.setFillColor(GRASS_COLOR);
-    grass.setOrigin({gridSize.x * CELL_SIZE / 2, gridSize.y * CELL_SIZE / 2});
+    grass.setOrigin((sf::Vector2f)gridSize * (CELL_SIZE / 2));
     grass.setPosition(center);
 
     gridLines.resize((gridSize.x + 1) + (gridSize.y + 1));
@@ -25,6 +25,7 @@ Background::Background(sf::Vector2i gridSize, sf::Vector2f center) : gridSize(gr
 }
 
 void Background::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+    states.transform *= getTransform();
     target.draw(grass, states);
     for (auto &line : gridLines) {
         target.draw(line, states);
