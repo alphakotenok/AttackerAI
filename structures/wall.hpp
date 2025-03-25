@@ -8,7 +8,7 @@ private:
     sf::CircleShape circle;
 
 public:
-    Wall(sf::Vector2i topLeft, sf::Vector2f drawCenter, sf::Vector2f drawOrigin, sf::Vector2f drawSize);
+    Wall(Structure::Type type, sf::Vector2i topLeft, sf::Vector2f drawPosition, sf::Vector2f drawSize);
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
     void update(sf::Time delta) override {};
 };

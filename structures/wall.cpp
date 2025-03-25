@@ -1,7 +1,6 @@
 #include "wall.hpp"
 
-Wall::Wall(sf::Vector2i topLeft, sf::Vector2f drawCenter, sf::Vector2f drawOrigin, sf::Vector2f drawSize) : Structure(topLeft, drawCenter, drawOrigin, drawSize) {
-    gridSize = {1, 1};
+Wall::Wall(Structure::Type type, sf::Vector2i topLeft, sf::Vector2f drawPosition, sf::Vector2f drawSize) : Structure(type, topLeft, drawPosition, drawSize) {
     health = 100;
     rectangle.setSize(drawSize * 0.8f);
     rectangle.setOrigin(drawOrigin - 0.1f * drawSize);

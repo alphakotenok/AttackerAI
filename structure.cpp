@@ -2,7 +2,7 @@
 #include "structures/wall.hpp"
 #include <memory>
 
-Structure::Structure(sf::Vector2i topLeft, sf::Vector2f drawPosition, sf::Vector2f drawOrigin, sf::Vector2f drawSize) : topLeft(topLeft), drawPosition(drawPosition), drawOrigin(drawOrigin), drawSize(drawSize) {}
+Structure::Structure(Structure::Type type, sf::Vector2i topLeft, sf::Vector2f drawPosition, sf::Vector2f drawSize) : type(type), topLeft(topLeft), drawPosition(drawPosition), drawOrigin(drawSize / 2.f), drawSize(drawSize) {}
 
 sf::Vector2i Structure::getGridSize(Structure::Type type) {
     if (type == WALL) return {1, 1};
@@ -10,7 +10,7 @@ sf::Vector2i Structure::getGridSize(Structure::Type type) {
     return {1, 1};
 }
 
-std::unique_ptr<Structure> Structure::create(Structure::Type type, sf::Vector2i topLeft, sf::Vector2f drawPosition, sf::Vector2f drawOrigin, sf::Vector2f drawSize) {
-    if (type == WALL) return std::make_unique<Wall>(topLeft, drawPosition, drawOrigin, drawSize);
+std::unique_ptr<Structure> Structure::create(Structure::Type type, sf::Vector2i topLeft, sf::Vector2f drawPosition, sf::Vector2f drawSize) {
+    if (type == WALL) return std::make_unique<Wall>(type, topLeft, drawPosition, drawSize);
     return nullptr;
 }

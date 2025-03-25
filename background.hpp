@@ -16,15 +16,13 @@ private:
 
 public:
     Background(sf::Vector2i gridSize, sf::Vector2f center);
-    inline sf::Vector2i getGridSize() { return gridSize; }
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
-    inline sf::Vector2f getCenter() {
-        return center;
+    inline sf::Vector2i getGridSize() { return gridSize; }
+    inline sf::Vector2f getCenter() { return center; }
+    inline sf::Vector2f getStructureDrawPosition(sf::Vector2i topLeft, sf::Vector2i gridSize) {
+        return center + (sf::Vector2f)(2 * topLeft - this->gridSize + gridSize) * (CELL_SIZE / 2);
     }
-    inline sf::Vector2f getStructureOrigin(sf::Vector2i topLeft, sf::Vector2i size) { // grid params -> draw params
-        return (sf::Vector2f)(gridSize - 2 * topLeft) * (CELL_SIZE / 2);
-    }
-    sf::Vector2f getStructureSize(sf::Vector2i size) { // grid params -> draw params
-        return (sf::Vector2f)size * CELL_SIZE;
+    inline sf::Vector2f getStructureDrawSize(sf::Vector2i gridSize) {
+        return (sf::Vector2f)gridSize * CELL_SIZE;
     }
 };
