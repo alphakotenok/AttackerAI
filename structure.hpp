@@ -17,7 +17,7 @@ public:
     inline sf::Vector2i getTopLeft() { return topLeft; }
     inline sf::Vector2i getGridSize() { return gridSize; }
     inline float getHealth() { return health; }
-    void update(sf::Time delta) {};
+    virtual void update(sf::Time delta) = 0;
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override {};
     enum Type {
         WALL,
