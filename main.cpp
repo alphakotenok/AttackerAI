@@ -1,6 +1,6 @@
 #include "background.hpp"
 #include "camera.hpp"
-#include "grid.hpp"
+#include "structure_grid.hpp"
 
 int main() {
 

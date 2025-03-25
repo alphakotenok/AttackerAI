@@ -1,4 +1,4 @@
-#include "grid.hpp"
+#include "structure_grid.hpp"
 #include "structure.hpp"
 #include <optional>
 
