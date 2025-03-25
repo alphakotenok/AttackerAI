@@ -46,7 +46,6 @@ void StuctureGrid::remove(std::list<std::unique_ptr<Structure>>::iterator &struc
 }
 
 void StuctureGrid::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-    states.transform = bg.getTransform();
     for (auto &structure : structures) {
         target.draw(*structure.get(), states);
     }
