@@ -25,7 +25,6 @@ Background::Background(sf::Vector2i gridSize, sf::Vector2f center) : gridSize(gr
 }
 
 void Background::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-    states.transform *= getTransform();
     target.draw(grass, states);
     for (auto &line : gridLines) {
         target.draw(line, states);

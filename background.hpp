@@ -7,7 +7,7 @@ const float GRID_LINE_SIZE = 2.f;
 const sf::Color GRASS_COLOR(0, 255, 0);
 const sf::Color GRID_LINE_COLOR(20, 235, 20);
 
-class Background : public sf::Drawable, public sf::Transformable {
+class Background : public sf::Drawable {
 private:
     sf::Vector2f center;
     sf::Vector2i gridSize;
