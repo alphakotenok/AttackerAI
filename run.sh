@@ -13,5 +13,6 @@ structure_grid.cpp \
 structure.cpp \
 structures/wall.cpp \
 structures/cannon.cpp \
+structures/archer_tower.cpp \
 
 ./main

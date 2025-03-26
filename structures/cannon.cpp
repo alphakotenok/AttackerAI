@@ -26,8 +26,6 @@ Cannon::Cannon(Structure::Type type, sf::Vector2i topLeft, sf::Vector2f drawPosi
     muzzle.setOrigin(sf::Vector2f{drawSize.x * (1.f / 30.f), drawSize.y * (1.f / 6.f)} - sf::Vector2f{drawSize.x * (0.5f - 1.f / 30.f), 0});
     muzzle.setPosition(drawPosition);
     muzzle.setFillColor(sf::Color(110, 110, 110));
-
-    rotate(sf::degrees(90));
 }
 
 void Cannon::draw(sf::RenderTarget &target, sf::RenderStates states) const {
