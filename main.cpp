@@ -22,6 +22,12 @@ int main() {
     structureGrid.place(Structure::WALL, {26, 27});
     structureGrid.place(Structure::WALL, {28, 27});
 
+    structureGrid.place(Structure::CANNON, {28, 24});
+    structureGrid.place(Structure::CANNON, {31, 24});
+    structureGrid.place(Structure::CANNON, {34, 24});
+    structureGrid.place(Structure::CANNON, {31, 21});
+    structureGrid.place(Structure::CANNON, {31, 18});
+
     sf::Clock clock;
     while (window.isOpen()) {
         sf::Time deltaTime = clock.restart();

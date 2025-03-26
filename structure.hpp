@@ -20,7 +20,6 @@ protected:
     float health;
 
     sf::Vector2f drawPosition;
-    sf::Vector2f drawOrigin;
     sf::Vector2f drawSize;
 
 public:

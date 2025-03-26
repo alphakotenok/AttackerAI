@@ -12,5 +12,6 @@ background.cpp \
 structure_grid.cpp \
 structure.cpp \
 structures/wall.cpp \
+structures/cannon.cpp \
 
 ./main

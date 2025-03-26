@@ -4,8 +4,8 @@
 
 class Wall : public Structure {
 private:
-    sf::RectangleShape rectangle;
-    sf::CircleShape circle;
+    sf::RectangleShape outer;
+    sf::RectangleShape inner;
 
 public:
     Wall(Structure::Type type, sf::Vector2i topLeft, sf::Vector2f drawPosition, sf::Vector2f drawSize);
