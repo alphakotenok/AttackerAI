@@ -11,7 +11,13 @@ public:
         MORTAR,
         AIR_DEFENCE,
         TOWN_HALL,
-
+        CLAN_CASTLE,
+        STORAGE,
+        COLLECTOR,
+        ARMY_CAMP,
+        LABORATORY,
+        BOMB,
+        SPRING_TRAP
     };
 
 protected:

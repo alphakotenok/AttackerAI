@@ -12,7 +12,16 @@ sf::Vector2i Structure::getGridSize(Structure::Type type) {
     if (type == CANNON) return {3, 3};
     if (type == ARCHER_TOWER) return {3, 3};
     if (type == MORTAR) return {3, 3};
-    return {1, 1};
+    if (type == AIR_DEFENCE) return {3, 3};
+    if (type == TOWN_HALL) return {4, 4};
+    if (type == CLAN_CASTLE) return {3, 3};
+    if (type == STORAGE) return {3, 3};
+    if (type == COLLECTOR) return {3, 3};
+    if (type == ARMY_CAMP) return {4, 4};
+    if (type == LABORATORY) return {3, 3};
+    if (type == BOMB) return {1, 1};
+    if (type == SPRING_TRAP) return {1, 1};
+    return {0, 0};
 }
 
 std::unique_ptr<Structure> Structure::create(Structure::Type type, sf::Vector2i topLeft, sf::Vector2f drawPosition, sf::Vector2f drawSize) {
