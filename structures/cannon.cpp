@@ -3,7 +3,7 @@
 Cannon::Cannon(Structure::Type type, sf::Vector2i topLeft, sf::Vector2f drawPosition, sf::Vector2f drawSize) : Structure(type, topLeft, drawPosition, drawSize) {
     health = 620;
     outer.setSize(drawSize * 0.933f);
-    outer.setOrigin(drawSize * 0.4665f);
+    outer.setOrigin(drawSize * 0.466f);
     outer.setPosition(drawPosition);
     outer.setFillColor(sf::Color(150, 150, 150));
 

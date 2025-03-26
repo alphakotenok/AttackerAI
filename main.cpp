@@ -1,5 +1,6 @@
 #include "background.hpp"
 #include "camera.hpp"
+#include "structure.hpp"
 #include "structure_grid.hpp"
 
 int main() {
@@ -34,6 +35,12 @@ int main() {
     structureGrid.place(Structure::ARCHER_TOWER, {21, 21});
     structureGrid.place(Structure::ARCHER_TOWER, {21, 18});
 
+    structureGrid.place(Structure::MORTAR, {26, 28});
+    structureGrid.place(Structure::MORTAR, {26, 31});
+    structureGrid.place(Structure::MORTAR, {26, 34});
+    structureGrid.place(Structure::MORTAR, {23, 34});
+    structureGrid.place(Structure::MORTAR, {29, 34});
+
     sf::Clock clock;
     while (window.isOpen()) {
         sf::Time deltaTime = clock.restart();
@@ -46,7 +53,7 @@ int main() {
 
         structureGrid.update(deltaTime);
 
-        window.clear(sf::Color::White);
+        window.clear(sf::Color(0, 168, 0));
 
         window.draw(bg);
         window.draw(structureGrid);

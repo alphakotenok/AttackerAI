@@ -14,5 +14,6 @@ structure.cpp \
 structures/wall.cpp \
 structures/cannon.cpp \
 structures/archer_tower.cpp \
+structures/mortar.cpp \
 
 ./main

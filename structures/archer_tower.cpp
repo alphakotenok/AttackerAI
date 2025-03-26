@@ -3,7 +3,7 @@
 ArcherTower::ArcherTower(Structure::Type type, sf::Vector2i topLeft, sf::Vector2f drawPosition, sf::Vector2f drawSize) : Structure(type, topLeft, drawPosition, drawSize) {
     health = 500;
     outer.setSize(drawSize * 0.933f);
-    outer.setOrigin(drawSize * 0.4665f);
+    outer.setOrigin(drawSize * 0.466f);
     outer.setPosition(drawPosition);
     outer.setFillColor(sf::Color(0, 168, 0));
 
