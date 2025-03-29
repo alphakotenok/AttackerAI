@@ -7,9 +7,9 @@
 ImageShape::PieceShape::PieceShape(std::function<sf::Vector2f(sf::Vector2f)> getOriginShift) : getOriginShift(getOriginShift) {
 }
 
-void ImageShape::PieceShape::setOutline(float thickness, sf::Color color) {
+void ImageShape::PieceShape::setOutline(std::function<float(sf::Vector2f)> getOutlineThickness, sf::Color color) {
     shape->setOutlineColor(color);
-    shape->setOutlineThickness(thickness);
+    this->getOutlineThickness = getOutlineThickness;
 }
 
 void ImageShape::PieceShape::draw(sf::RenderTarget &target, sf::RenderStates states) const {
@@ -26,6 +26,7 @@ void ImageShape::RectanglePiece::init(sf::Vector2f drawSize, sf::Vector2f positi
     rectangle->setSize(getDrawSize(drawSize));
     rectangle->setOrigin(getDrawSize(drawSize) / 2.f + getOriginShift(drawSize));
     rectangle->setPosition(position);
+    if (getOutlineThickness) rectangle->setOutlineThickness(getOutlineThickness.value()(drawSize));
 }
 
 ImageShape::CirclePiece::CirclePiece(std::function<sf::Vector2f(sf::Vector2f)> getOriginShift, std::function<float(sf::Vector2f)> getRadius, sf::Color color, std::size_t pointNum) : PieceShape(getOriginShift), getRadius(getRadius), pointNum(pointNum) {
@@ -59,9 +60,9 @@ void ImageShape::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     }
 }
 
-void ImageShape::setOutline(std::size_t index, float thickness, sf::Color color) {
+void ImageShape::setOutline(std::size_t index, std::function<float(sf::Vector2f)> getOutlineThickness, sf::Color color) {
     assert(index < shapes.size());
-    shapes[index]->setOutline(thickness, color);
+    shapes[index]->setOutline(getOutlineThickness, color);
 }
 
 void ImageShape::addRectangleShape(std::function<sf::Vector2f(sf::Vector2f)> getOriginShift, std::function<sf::Vector2f(sf::Vector2f)> getDrawSize, sf::Color color) {

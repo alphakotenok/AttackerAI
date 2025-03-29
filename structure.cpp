@@ -1,6 +1,5 @@
 #include "structure.hpp"
 #include "image_shape.hpp"
-#include "structures/archer_tower.hpp"
 #include "structures/mortar.hpp"
 
 Structure::Structure(Structure::Type type, sf::Vector2i topLeft, sf::Vector2f drawPosition, sf::Vector2f drawSize) : type(type), topLeft(topLeft), drawPosition(drawPosition), drawSize(drawSize) {}
@@ -29,33 +28,51 @@ sf::Vector2i Structure::getGridSize(Structure::Type type) {
 float Structure::getHealth(Structure::Type type) {
     if (type == WALL) return 900;
     if (type == CANNON) return 620;
+    if (type == ARCHER_TOWER) return 500;
+    if (type == MORTAR) return 450;
+    if (type == AIR_DEFENCE) return 850;
+    if (type == TOWN_HALL) return 2100;
+    if (type == CLAN_CASTLE) return 1400;
+    if (type == STORAGE) return 1700;
+    if (type == COLLECTOR) return 680;
+    if (type == ARMY_CAMP) return 310;
+    if (type == LABORATORY) return 550;
+    if (type == BOMB) return 1;
+    if (type == SPRING_TRAP) return 1;
     return 1;
 }
 
 std::unique_ptr<Structure> Structure::create(Structure::Type type, sf::Vector2i topLeft, sf::Vector2f drawPosition, sf::Vector2f drawSize) {
+    std::unique_ptr<ImageShape> base = std::make_unique<ImageShape>();
+    std::optional<std::unique_ptr<ImageShape>> tower;
+
     if (type == WALL) {
-        std::unique_ptr<ImageShape> base = std::make_unique<ImageShape>();
         base->addRectangleShape(proportional(0, 0), proportional(0.8, 0.8), sf::Color(60, 60, 60));
         base->addRectangleShape(proportional(0, 0), proportional(0.4, 0.4), sf::Color(100, 100, 100));
-        return std::make_unique<Structure>(type, topLeft, std::move(base));
     }
     if (type == CANNON) {
-
-        std::unique_ptr<ImageShape> base = std::make_unique<ImageShape>();
-        std::unique_ptr<ImageShape> tower = std::make_unique<ImageShape>();
+        tower = std::make_unique<ImageShape>();
         base->addRectangleShape(proportional(0, 0), proportional(13.f / 15.f, 13.f / 15.f), sf::Color(150, 150, 150));
         base->addCircleShape(proportional(0, 0), proportionalX(0.36f), sf::Color(160, 82, 45));
-        tower->addCircleShape(proportional(0, 0), proportionalX(0.15f), sf::Color(90, 90, 90));
-        tower->addRectangleShape(proportional(0, 0.25f), proportional(0.3f, 0.5f), sf::Color(90, 90, 90));
-        tower->addRectangleShape(proportional(0, 0.5f - 1.f / 30.f), proportional(1.f / 3.f, 1.f / 15.f), sf::Color(110, 110, 110));
-        auto structure = std::make_unique<Structure>(type, topLeft, std::move(base));
-        structure->addTower(std::move(tower));
-        return structure;
+        tower.value()->addCircleShape(proportional(0, 0), proportionalX(0.15f), sf::Color(90, 90, 90));
+        tower.value()->addRectangleShape(proportional(0, 0.25f), proportional(0.3f, 0.5f), sf::Color(90, 90, 90));
+        tower.value()->addRectangleShape(proportional(0, 0.5f - 1.f / 30.f), proportional(1.f / 3.f, 1.f / 15.f), sf::Color(110, 110, 110));
     }
-    if (type == ARCHER_TOWER) return std::make_unique<ArcherTower>(type, topLeft, drawPosition, drawSize);
-    if (type == MORTAR) return std::make_unique<Mortar>(type, topLeft, drawPosition, drawSize);
+    if (type == ARCHER_TOWER) {
 
-    return nullptr;
+        tower = std::make_unique<ImageShape>();
+        base->addRectangleShape(proportional(0, 0), proportional(13.f / 15.f, 13.f / 15.f), sf::Color(0, 168, 0));
+        base->addRectangleShape(proportional(0, 0), proportional(0.5f, 0.5f), sf::Color(139, 69, 19));
+        base->setOutline(1, proportionalX(0.05f), sf::Color(140, 140, 140));
+        tower.value()->addCircleShape(proportional(0, 0), proportionalX(0.25f), sf::Color(205, 0, 77), 3);
+        tower.value()->addRectangleShape(proportional(0, 0.15f), proportional(0.12f, 0.4f), sf::Color(205, 0, 77));
+    }
+    if (type == MORTAR) {
+        return std::make_unique<Mortar>(type, topLeft, drawPosition, drawSize);
+    }
+    auto structure = std::make_unique<Structure>(type, topLeft, std::move(base));
+    if (tower) structure->addTower(std::move(tower.value()));
+    return structure;
 }
 
 void Structure::draw(sf::RenderTarget &target, sf::RenderStates states) const {
