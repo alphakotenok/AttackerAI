@@ -2,8 +2,6 @@
 #include "structure.hpp"
 #include <optional>
 
-const float EPS = 1e-4;
-
 StuctureGrid::StuctureGrid(Background &bg) : bg(bg) {
     size = bg.getGridSize();
     cellStructure = std::vector<std::vector<std::optional<std::list<std::unique_ptr<Structure>>::iterator>>>(
@@ -23,6 +21,9 @@ bool StuctureGrid::place(Structure::Type type, sf::Vector2i topLeft) {
         }
     }
     auto structure = Structure::create(type, topLeft, bg.getStructureDrawPosition(topLeft, structureGridSize), bg.getStructureDrawSize(structureGridSize));
+    if (type == Structure::WALL || type == Structure::CANNON) {
+        structure->initDraw(bg.getStructureDrawSize(structureGridSize), bg.getStructureDrawPosition(topLeft, structureGridSize));
+    }
     structures.push_back(std::move(structure));
 
     for (int y = 0; y < structureGridSize.y; ++y) {
@@ -55,7 +56,7 @@ void StuctureGrid::update(sf::Time deltaTime) {
     auto structure = structures.begin();
     while (structure != structures.end()) {
         structure->get()->update(deltaTime);
-        if (structure->get()->getHealth() < EPS) {
+        if (structure->get()->getToDelete()) {
             remove(structure);
         } else {
             ++structure;

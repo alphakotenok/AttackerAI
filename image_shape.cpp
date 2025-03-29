@@ -54,7 +54,6 @@ void ImageShape::init(sf::Vector2f drawSize, sf::Vector2f position) {
 void ImageShape::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     assert(isInitted);
     states.transform = getTransform();
-
     for (auto &shape : shapes) {
         shape->draw(target, states);
     }
