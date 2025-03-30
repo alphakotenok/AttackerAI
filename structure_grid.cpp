@@ -2,14 +2,14 @@
 #include "structure.hpp"
 #include <optional>
 
-StuctureGrid::StuctureGrid(Background &bg) : bg(bg) {
+StructureGrid::StructureGrid(Background &bg) : bg(bg) {
     size = bg.getGridSize();
     cellStructure = std::vector<std::vector<std::optional<std::list<std::unique_ptr<Structure>>::iterator>>>(
         size.y,
         std::vector<std::optional<std::list<std::unique_ptr<Structure>>::iterator>>(size.x));
 }
 
-bool StuctureGrid::place(Structure::Type type, sf::Vector2i topLeft) {
+bool StructureGrid::place(Structure::Type type, sf::Vector2i topLeft) {
     auto structureGridSize = Structure::getGridSize(type);
     for (int y = 0; y < structureGridSize.y; ++y) {
         for (int x = 0; x < structureGridSize.x; ++x) {
@@ -33,7 +33,7 @@ bool StuctureGrid::place(Structure::Type type, sf::Vector2i topLeft) {
     return true;
 }
 
-void StuctureGrid::remove(std::list<std::unique_ptr<Structure>>::iterator &structure) {
+void StructureGrid::remove(std::list<std::unique_ptr<Structure>>::iterator &structure) {
     auto structureTopLeft = structure->get()->getTopLeft();
     auto structureGridSize = structure->get()->getGridSize();
     for (int y = 0; y < structureGridSize.y; ++y) {
@@ -44,13 +44,13 @@ void StuctureGrid::remove(std::list<std::unique_ptr<Structure>>::iterator &struc
     structure = structures.erase(structure);
 }
 
-void StuctureGrid::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+void StructureGrid::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     for (auto &structure : structures) {
         target.draw(*structure.get(), states);
     }
 }
 
-void StuctureGrid::update(sf::Time deltaTime) {
+void StructureGrid::update(sf::Time deltaTime) {
     auto structure = structures.begin();
     while (structure != structures.end()) {
         structure->get()->update(deltaTime);
@@ -60,4 +60,8 @@ void StuctureGrid::update(sf::Time deltaTime) {
             ++structure;
         }
     }
+}
+
+const std::list<std::unique_ptr<Structure>>& StructureGrid::getStructures() const {
+    return structures;
 }

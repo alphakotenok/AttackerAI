@@ -2,9 +2,13 @@
 #include "camera.hpp"
 #include "structure.hpp"
 #include "structure_grid.hpp"
+#include "unit.hpp"
+#include "unit_grid.hpp"
+#include <SFML/Graphics.hpp>
+#include <memory>
+#include <iostream>
 
 int main() {
-
     sf::ContextSettings settings;
     settings.antiAliasingLevel = 8;
 
@@ -15,7 +19,7 @@ int main() {
 
     Background bg({45, 45}, {0, 0});
 
-    StuctureGrid structureGrid(bg);
+    StructureGrid structureGrid(bg);
 
     structureGrid.place(Structure::BUILDERS_HUT, {10, 10});
     structureGrid.place(Structure::BUILDERS_HUT, {9, 13});
@@ -75,6 +79,28 @@ int main() {
     for (int i = 0; i < 7; ++i) structureGrid.place(Structure::WALL, {21 - i, 11});
     for (int i = 0; i < 3; ++i) structureGrid.place(Structure::WALL, {15, 12 + i});
 
+    UnitGrid unitGrid;
+
+    auto barbarian1 = Unit::create(sf::Vector2f(100, 100));
+    auto barbarian2 = Unit::create(sf::Vector2f(150, 100));
+    auto barbarian3 = Unit::create(sf::Vector2f(200, 100));
+    auto barbarian4 = Unit::create(sf::Vector2f(250, 100));
+
+    barbarian1->getShape()->setFillColor(sf::Color::Red);
+    barbarian2->getShape()->setFillColor(sf::Color::Blue);
+    barbarian3->getShape()->setFillColor(sf::Color::Green);
+    barbarian4->getShape()->setFillColor(sf::Color::Yellow);
+
+    barbarian1->initDraw(sf::Vector2f(30, 30));
+    barbarian2->initDraw(sf::Vector2f(30, 30));
+    barbarian3->initDraw(sf::Vector2f(30, 30));
+    barbarian4->initDraw(sf::Vector2f(30, 30));
+
+    unitGrid.addUnit(std::move(barbarian1));
+    unitGrid.addUnit(std::move(barbarian2));
+    unitGrid.addUnit(std::move(barbarian3));
+    unitGrid.addUnit(std::move(barbarian4));
+
     sf::Clock clock;
     while (window.isOpen()) {
         sf::Time deltaTime = clock.restart();
@@ -86,16 +112,23 @@ int main() {
         }
 
         structureGrid.update(deltaTime);
+        unitGrid.update(deltaTime, structureGrid.getStructures());
 
         window.clear(sf::Color(0, 168, 0));
 
         window.draw(bg);
         window.draw(structureGrid);
+        window.draw(unitGrid);
 
         camera.setViewOn(window);
 
-        // Update the window
         window.display();
+
+        // get health stats of all the buildings
+        // for (const auto& structure : structureGrid.getStructures()) {
+        //     std::cout << structure->getHealth() << "\n";
+        // }
     }
+
     return 0;
 }

@@ -206,3 +206,11 @@ void Structure::initDraw(sf::Vector2f drawSize, sf::Vector2f position) {
 void Structure::addTower(std::unique_ptr<ImageShape> image) {
     tower = std::make_unique<Tower>(std::move(image));
 }
+
+void Structure::takeDamage(float damage) {
+    health -= damage;
+    if (health <= 0) {
+        health = 0;
+        toDelete = true;
+    }
+}

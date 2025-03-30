@@ -17,5 +17,7 @@ structures/archer_tower.cpp \
 structures/mortar.cpp \
 image_shape.cpp \
 tower.cpp \
+unit.cpp \
+unit_grid.cpp
 
 ./main

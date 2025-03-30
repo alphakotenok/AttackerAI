@@ -3,6 +3,8 @@
 #include "image_shape.hpp"
 #include "tower.hpp"
 #include <SFML/Graphics.hpp>
+#include <memory>
+#include <vector>
 
 const float EPS = 1e-4;
 
@@ -62,11 +64,14 @@ public:
     Structure(Structure::Type type, sf::Vector2i topLeft, std::unique_ptr<ImageShape> baseImage);
     inline sf::Vector2i getTopLeft() { return topLeft; }
     inline sf::Vector2i getGridSize() { return Structure::getGridSize(type); }
+    inline sf::Vector2f getDrawPosition() { return drawPosition; }
     inline float getHealth() { return health; }
     inline bool getToDelete() { return toDelete; }
     inline Structure::Type getType() { return type; }
+    void takeDamage(float damage);
     virtual void update(sf::Time deltaTime);
     void initDraw(sf::Vector2f drawSize, sf::Vector2f position);
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
     void addTower(std::unique_ptr<ImageShape> image);
+    bool isDead() const { return health <= 0; }
 };
