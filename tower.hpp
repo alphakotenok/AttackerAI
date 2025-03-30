@@ -15,6 +15,10 @@ private:
     sf::Vector2f position;
     float innerRadius;
     float outerRadius;
+    float muzzleLength;
+    float bulletRadius;
+    sf::Time reloadTime;
+    sf::Time curReload;
 
     sf::Angle getAngleToTarget(sf::Vector2f point) {
         float len = distanceL2(point, {0, 0});
@@ -27,7 +31,7 @@ private:
     }
 
 public:
-    Tower(std::unique_ptr<ImageShape> image, Sergei &sergei, float innerRadius, float outerRadius, Structure::Type type);
+    Tower(std::unique_ptr<ImageShape> image, Sergei &sergei, Structure::Type type);
     void update(sf::Time deltaTime);
     void initDraw(sf::Vector2f drawSize, sf::Vector2f position);
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;

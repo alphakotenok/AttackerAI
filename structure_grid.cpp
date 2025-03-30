@@ -56,6 +56,7 @@ void StructureGrid::update(sf::Time deltaTime) {
     while (structure != structures.end()) {
         structure->get()->update(deltaTime);
         if (structure->get()->getToDelete()) {
+            sergei.getUnitGrid().setUpdateTargets();
             remove(structure);
         } else {
             ++structure;

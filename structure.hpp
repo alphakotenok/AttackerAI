@@ -7,18 +7,6 @@
 
 class Tower;
 
-inline auto proportional(float a, float b) {
-    return [a, b](sf::Vector2f pair) { return sf::Vector2f{pair.x * a, pair.y * b}; };
-}
-
-inline auto proportionalX(float a) {
-    return [a](sf::Vector2f pair) { return pair.x * a; };
-}
-
-inline auto proportionalY(float a) {
-    return [a](sf::Vector2f pair) { return pair.y * a; };
-}
-
 class Sergei;
 
 class Structure : public sf::Drawable {
@@ -61,7 +49,10 @@ protected:
 public:
     static sf::Vector2i getGridSize(Structure::Type type);
     static float getHealth(Structure::Type type);
-    static sf::Vector2f getTowerRadius(Structure::Type type);
+    static sf::Vector2f getTowerRange(Structure::Type type);
+    static float getDamage(Structure::Type type);
+    static sf::Time getReloadTime(Structure::Type type);
+    static std::function<sf::Vector2f(sf::Vector2f)> getMuzzleLengthAndBulletRadiusFunctor(Structure::Type type);
     static std::unique_ptr<Structure> create(Structure::Type type, Sergei &sergei, sf::Vector2i topLeft);
     static bool canAttack(Structure::Type strType, Unit::Type unitType);
 
@@ -76,6 +67,6 @@ public:
     virtual void update(sf::Time deltaTime);
     void initDraw(sf::Vector2f drawSize, sf::Vector2f position);
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
-    void addTower(std::unique_ptr<ImageShape> image, sf::Vector2f radius, Type type);
+    void addTower(std::unique_ptr<ImageShape> image, Type type);
     bool isDead() const { return health < EPS; }
 };

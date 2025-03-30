@@ -30,6 +30,7 @@ BulletManager &Sergei::getBulletManager() {
 void Sergei::update(sf::Time deltaTime) {
     sg->update(deltaTime);
     ug->update(deltaTime);
+    bm->update(deltaTime);
 }
 
 void Sergei::draw(sf::RenderTarget &target, sf::RenderStates states) const {

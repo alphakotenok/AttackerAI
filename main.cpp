@@ -83,25 +83,12 @@ int main() {
     for (int i = 0; i < 7; ++i) structureGrid.place(Structure::WALL, {21 - i, 11});
     for (int i = 0; i < 3; ++i) structureGrid.place(Structure::WALL, {15, 12 + i});
 
-    auto barbarian1 = Unit::create(sf::Vector2f(100, 100));
-    auto barbarian2 = Unit::create(sf::Vector2f(150, 100));
-    auto barbarian3 = Unit::create(sf::Vector2f(200, 100));
-    auto barbarian4 = Unit::create(sf::Vector2f(250, 100));
-
-    barbarian1->getShape()->setFillColor(sf::Color::Red);
-    barbarian2->getShape()->setFillColor(sf::Color::Blue);
-    barbarian3->getShape()->setFillColor(sf::Color::Green);
-    barbarian4->getShape()->setFillColor(sf::Color::Yellow);
-
-    barbarian1->initDraw(sf::Vector2f(30, 30));
-    barbarian2->initDraw(sf::Vector2f(30, 30));
-    barbarian3->initDraw(sf::Vector2f(30, 30));
-    barbarian4->initDraw(sf::Vector2f(30, 30));
-
-    unitGrid.addUnit(std::move(barbarian1));
-    unitGrid.addUnit(std::move(barbarian2));
-    unitGrid.addUnit(std::move(barbarian3));
-    unitGrid.addUnit(std::move(barbarian4));
+    for (int i = 0; i < 80; ++i) {
+        auto barbarian = Unit::create(sf::Vector2f(1000 * cos(sf::degrees(360.f / 80.f * i).asRadians()), 1000 * sin(sf::degrees(360.f / 80.f * i).asRadians())));
+        barbarian->getShape()->setFillColor(sf::Color::Red);
+        barbarian->initDraw(sf::Vector2f(30, 30));
+        unitGrid.addUnit(std::move(barbarian));
+    }
 
     sf::Clock clock;
     while (window.isOpen()) {

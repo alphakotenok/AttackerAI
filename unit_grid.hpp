@@ -15,9 +15,11 @@ public:
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
     const std::list<std::unique_ptr<Unit>> &getUnits() const;
     std::vector<std::unique_ptr<Unit>> &getUnitsVec();
+    void setUpdateTargets() { updateTargets = true; };
 
 private:
     std::list<std::unique_ptr<Unit>> units;
     std::vector<std::unique_ptr<Unit>> unitsVec;
     Sergei &sergei;
+    bool updateTargets;
 };

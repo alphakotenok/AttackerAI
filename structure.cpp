@@ -49,12 +49,28 @@ float Structure::getHealth(Structure::Type type) {
     return 0;
 }
 
-sf::Vector2f Structure::getTowerRadius(Structure::Type type) {
+sf::Vector2f Structure::getTowerRange(Structure::Type type) {
     if (type == CANNON) return {0, 9};
     if (type == ARCHER_TOWER) return {0, 10};
     if (type == MORTAR) return {4, 11};
     if (type == AIR_DEFENSE) return {0, 10};
     return {0, 0};
+}
+
+sf::Time Structure::getReloadTime(Structure::Type type) {
+    if (type == CANNON) return sf::seconds(0.8f);
+    if (type == ARCHER_TOWER) return sf::seconds(0.5f);
+    if (type == MORTAR) return sf::seconds(5);
+    if (type == AIR_DEFENSE) return sf::seconds(1.f);
+    return sf::seconds(0.8);
+}
+
+std::function<sf::Vector2f(sf::Vector2f)> Structure::getMuzzleLengthAndBulletRadiusFunctor(Structure::Type type) {
+    if (type == CANNON) return proportional(0.5f, 0.10f);
+    if (type == ARCHER_TOWER) return proportional(0.3f, 0.05f);
+    if (type == MORTAR) return proportional(0.1f, 0.1f);
+    if (type == AIR_DEFENSE) return proportional(0.4f, 0.05f);
+    return proportional(0.f, 0.f);
 }
 
 bool Structure::canAttack(Structure::Type strType, Unit::Type unitType) {
@@ -189,7 +205,7 @@ std::unique_ptr<Structure> Structure::create(Structure::Type type, Sergei &serge
     auto structure = std::make_unique<Structure>(type, sergei, topLeft, std::move(base));
     if (tower) {
         tower.value()->setRotation(sf::degrees(rand()));
-        structure->addTower(std::move(tower.value()), getTowerRadius(type), type);
+        structure->addTower(std::move(tower.value()), type);
     }
     return structure;
 }
@@ -219,9 +235,8 @@ void Structure::initDraw(sf::Vector2f drawSize, sf::Vector2f position) {
     }
 }
 
-void Structure::addTower(std::unique_ptr<ImageShape> image, sf::Vector2f radius, Type type) {
-    assert(radius.x <= radius.y);
-    tower = std::make_unique<Tower>(std::move(image), sergei, radius.x, radius.y, type);
+void Structure::addTower(std::unique_ptr<ImageShape> image, Type type) {
+    tower = std::make_unique<Tower>(std::move(image), sergei, type);
 }
 
 void Structure::takeDamage(float damage) {

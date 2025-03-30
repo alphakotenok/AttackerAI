@@ -12,8 +12,8 @@ Unit::Unit(sf::Vector2f position)
 
     if (type == Type::BARBARIAN) {
         speed = 100;
-        health = 100;
-        damage = 200;
+        health = 65;
+        damage = 14;
         attackRange = 2;
         attackSpeed = 1;
         lastAttackTime = 0;
