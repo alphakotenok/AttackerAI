@@ -1,5 +1,6 @@
 #include "Sergei.hpp"
 #include "background.hpp"
+#include "bullet.hpp"
 #include "camera.hpp"
 #include "structure.hpp"
 #include "structure_grid.hpp"
@@ -21,7 +22,6 @@ int main() {
     Sergei sergei({45, 45}, {0, 0});
 
     Background &bg = sergei.getBackground();
-
     StructureGrid &structureGrid = sergei.getStructureGrid();
     UnitGrid &unitGrid = sergei.getUnitGrid();
 
@@ -113,14 +113,11 @@ int main() {
             camera.handleEvent(event);
         }
 
-        structureGrid.update(deltaTime);
-        unitGrid.update(deltaTime, structureGrid.getStructures());
+        sergei.update(deltaTime);
 
         window.clear(sf::Color(0, 168, 0));
 
-        window.draw(bg);
-        window.draw(structureGrid);
-        window.draw(unitGrid);
+        window.draw(sergei);
 
         camera.setViewOn(window);
 

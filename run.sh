@@ -15,6 +15,8 @@ image_shape.cpp \
 tower.cpp \
 unit.cpp \
 unit_grid.cpp \
-sergei.cpp
+sergei.cpp \
+bullet.cpp \
+bullet_manager.cpp \
 
 ./main

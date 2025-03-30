@@ -5,10 +5,13 @@
 #include <list>
 #include <memory>
 
+class Sergei;
+
 class UnitGrid : public sf::Drawable {
 public:
+    UnitGrid(Sergei &sergei);
     void addUnit(std::unique_ptr<Unit> unit);
-    void update(sf::Time deltaTime, const std::list<std::unique_ptr<Structure>> &structures);
+    void update(sf::Time deltaTime);
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
     const std::list<std::unique_ptr<Unit>> &getUnits() const;
     std::vector<std::unique_ptr<Unit>> &getUnitsVec();
@@ -16,4 +19,5 @@ public:
 private:
     std::list<std::unique_ptr<Unit>> units;
     std::vector<std::unique_ptr<Unit>> unitsVec;
+    Sergei &sergei;
 };
