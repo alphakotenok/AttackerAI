@@ -21,9 +21,7 @@ bool StuctureGrid::place(Structure::Type type, sf::Vector2i topLeft) {
         }
     }
     auto structure = Structure::create(type, topLeft, bg.getStructureDrawPosition(topLeft, structureGridSize), bg.getStructureDrawSize(structureGridSize));
-    if (type == Structure::WALL || type == Structure::CANNON || type == Structure::ARCHER_TOWER) {
-        structure->initDraw(bg.getStructureDrawSize(structureGridSize), bg.getStructureDrawPosition(topLeft, structureGridSize));
-    }
+    structure->initDraw(bg.getStructureDrawSize(structureGridSize), bg.getStructureDrawPosition(topLeft, structureGridSize));
     structures.push_back(std::move(structure));
 
     for (int y = 0; y < structureGridSize.y; ++y) {

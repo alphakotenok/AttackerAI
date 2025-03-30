@@ -17,29 +17,63 @@ int main() {
 
     StuctureGrid structureGrid(bg);
 
-    structureGrid.place(Structure::WALL, {27, 27});
-    structureGrid.place(Structure::WALL, {27, 26});
-    structureGrid.place(Structure::WALL, {27, 25});
-    structureGrid.place(Structure::WALL, {26, 27});
-    structureGrid.place(Structure::WALL, {28, 27});
+    structureGrid.place(Structure::BUILDERS_HUT, {10, 10});
+    structureGrid.place(Structure::BUILDERS_HUT, {9, 13});
+    structureGrid.place(Structure::BUILDERS_HUT, {13, 9});
 
-    structureGrid.place(Structure::CANNON, {28, 24});
-    structureGrid.place(Structure::CANNON, {31, 24});
-    structureGrid.place(Structure::CANNON, {34, 24});
-    structureGrid.place(Structure::CANNON, {31, 21});
-    structureGrid.place(Structure::CANNON, {31, 18});
+    structureGrid.place(Structure::COLLECTOR_GOLD, {12, 12});
+    structureGrid.place(Structure::COLLECTOR_ELIXIR, {8, 16});
+    structureGrid.place(Structure::COLLECTOR_ELIXIR, {16, 8});
 
-    structureGrid.place(Structure::ARCHER_TOWER, {24, 24});
-    structureGrid.place(Structure::ARCHER_TOWER, {21, 24});
-    structureGrid.place(Structure::ARCHER_TOWER, {18, 24});
-    structureGrid.place(Structure::ARCHER_TOWER, {21, 21});
-    structureGrid.place(Structure::ARCHER_TOWER, {21, 18});
+    structureGrid.place(Structure::BARRACK, {8, 20});
+    structureGrid.place(Structure::BARRACK, {20, 8});
 
-    structureGrid.place(Structure::MORTAR, {26, 28});
-    structureGrid.place(Structure::MORTAR, {26, 31});
-    structureGrid.place(Structure::MORTAR, {26, 34});
-    structureGrid.place(Structure::MORTAR, {23, 34});
-    structureGrid.place(Structure::MORTAR, {29, 34});
+    structureGrid.place(Structure::ARMY_CAMP, {11, 23});
+    structureGrid.place(Structure::ARMY_CAMP, {23, 12});
+
+    structureGrid.place(Structure::COLLECTOR_GOLD, {15, 28});
+    structureGrid.place(Structure::COLLECTOR_GOLD, {27, 16});
+
+    structureGrid.place(Structure::COLLECTOR_ELIXIR, {19, 28});
+    structureGrid.place(Structure::BARRACK, {27, 20});
+
+    structureGrid.place(Structure::LABORATORY, {23, 27});
+    structureGrid.place(Structure::COLLECTOR_ELIXIR, {26, 24});
+    structureGrid.place(Structure::COLLECTOR_GOLD, {23, 24});
+    structureGrid.place(Structure::BUILDERS_HUT, {26, 27});
+
+    structureGrid.place(Structure::STORAGE_GOLD, {12, 16});
+    structureGrid.place(Structure::CANNON, {12, 19});
+    structureGrid.place(Structure::ARCHER_TOWER, {16, 12});
+    structureGrid.place(Structure::STORAGE_ELIXIR, {19, 12});
+
+    structureGrid.place(Structure::CLAN_CASTLE, {16, 17});
+    structureGrid.place(Structure::MORTAR, {16, 20});
+    structureGrid.place(Structure::AIR_DEFENCE, {19, 16});
+    structureGrid.place(Structure::TOWN_HALL, {19, 19});
+
+    structureGrid.place(Structure::STORAGE_ELIXIR, {16, 24});
+    structureGrid.place(Structure::ARCHER_TOWER, {19, 24});
+    structureGrid.place(Structure::CANNON, {23, 17});
+    structureGrid.place(Structure::STORAGE_GOLD, {23, 20});
+
+    structureGrid.place(Structure::BOMB, {15, 16});
+    structureGrid.place(Structure::BOMB, {15, 17});
+    structureGrid.place(Structure::SPRING_TRAP, {19, 15});
+    structureGrid.place(Structure::SPRING_TRAP, {17, 23});
+
+    for (int i = 0; i < 8; ++i) structureGrid.place(Structure::WALL, {11 + i, 15});
+    for (int i = 0; i < 7; ++i) structureGrid.place(Structure::WALL, {11, 16 + i});
+    for (int i = 0; i < 3; ++i) structureGrid.place(Structure::WALL, {12 + i, 22});
+    for (int i = 0; i < 10; ++i) structureGrid.place(Structure::WALL, {15, 18 + i});
+    for (int i = 0; i < 7; ++i) structureGrid.place(Structure::WALL, {16 + i, 27});
+    for (int i = 0; i < 3; ++i) structureGrid.place(Structure::WALL, {22, 26 - i});
+    for (int i = 0; i < 9; ++i) structureGrid.place(Structure::WALL, {18 + i, 23});
+    for (int i = 0; i < 7; ++i) structureGrid.place(Structure::WALL, {26, 22 - i});
+    for (int i = 0; i < 3; ++i) structureGrid.place(Structure::WALL, {25 - i, 16});
+    for (int i = 0; i < 8; ++i) structureGrid.place(Structure::WALL, {22, 18 - i});
+    for (int i = 0; i < 7; ++i) structureGrid.place(Structure::WALL, {21 - i, 11});
+    for (int i = 0; i < 3; ++i) structureGrid.place(Structure::WALL, {15, 12 + i});
 
     sf::Clock clock;
     while (window.isOpen()) {

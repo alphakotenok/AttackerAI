@@ -28,10 +28,14 @@ public:
         AIR_DEFENCE,
         TOWN_HALL,
         CLAN_CASTLE,
-        STORAGE,
-        COLLECTOR,
+        STORAGE_GOLD,
+        STORAGE_ELIXIR,
+        COLLECTOR_GOLD,
+        COLLECTOR_ELIXIR,
         ARMY_CAMP,
+        BARRACK,
         LABORATORY,
+        BUILDERS_HUT,
         BOMB,
         SPRING_TRAP
     };

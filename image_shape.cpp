@@ -12,8 +12,13 @@ void ImageShape::PieceShape::setOutline(std::function<float(sf::Vector2f)> getOu
     this->getOutlineThickness = getOutlineThickness;
 }
 
+void ImageShape::PieceShape::setExtraRotation(sf::Angle angle) {
+    shape->setRotation(angle);
+    extraRotation = angle;
+}
+
 void ImageShape::PieceShape::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-    target.draw(*shape);
+    target.draw(*shape, states);
 }
 
 ImageShape::RectanglePiece::RectanglePiece(std::function<sf::Vector2f(sf::Vector2f)> getOriginShift, std::function<sf::Vector2f(sf::Vector2f)> getDrawSize, sf::Color color) : PieceShape(getOriginShift), getDrawSize(getDrawSize) {
@@ -29,8 +34,8 @@ void ImageShape::RectanglePiece::init(sf::Vector2f drawSize, sf::Vector2f positi
     if (getOutlineThickness) rectangle->setOutlineThickness(getOutlineThickness.value()(drawSize));
 }
 
-ImageShape::CirclePiece::CirclePiece(std::function<sf::Vector2f(sf::Vector2f)> getOriginShift, std::function<float(sf::Vector2f)> getRadius, sf::Color color, std::size_t pointNum) : PieceShape(getOriginShift), getRadius(getRadius), pointNum(pointNum) {
-    shape.reset(new sf::CircleShape());
+ImageShape::CirclePiece::CirclePiece(std::function<sf::Vector2f(sf::Vector2f)> getOriginShift, std::function<float(sf::Vector2f)> getRadius, sf::Color color, std::size_t pointNum) : PieceShape(getOriginShift), getRadius(getRadius) {
+    shape.reset(new sf::CircleShape(0, pointNum));
     shape->setFillColor(color);
 }
 
@@ -39,7 +44,7 @@ void ImageShape::CirclePiece::init(sf::Vector2f drawSize, sf::Vector2f position)
     circle->setRadius(getRadius(drawSize));
     circle->setOrigin(sf::Vector2f{getRadius(drawSize), getRadius(drawSize)} + getOriginShift(drawSize));
     circle->setPosition(position);
-    circle->setPointCount(pointNum);
+    if (getOutlineThickness) circle->setOutlineThickness(getOutlineThickness.value()(drawSize));
 }
 
 ImageShape::ImageShape() : isInitted(false) {
@@ -54,7 +59,6 @@ void ImageShape::init(sf::Vector2f drawSize, sf::Vector2f position) {
 
 void ImageShape::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     assert(isInitted);
-    states.transform = getTransform();
     for (auto &shape : shapes) {
         shape->draw(target, states);
     }
@@ -65,10 +69,21 @@ void ImageShape::setOutline(std::size_t index, std::function<float(sf::Vector2f)
     shapes[index]->setOutline(getOutlineThickness, color);
 }
 
+void ImageShape::setExtraRotation(std::size_t index, sf::Angle angle) {
+    assert(index < shapes.size());
+    shapes[index]->setExtraRotation(angle);
+}
+
 void ImageShape::addRectangleShape(std::function<sf::Vector2f(sf::Vector2f)> getOriginShift, std::function<sf::Vector2f(sf::Vector2f)> getDrawSize, sf::Color color) {
     shapes.push_back(std::make_unique<ImageShape::RectanglePiece>(getOriginShift, getDrawSize, color));
 }
 
 void ImageShape::addCircleShape(std::function<sf::Vector2f(sf::Vector2f)> getOriginShift, std::function<float(sf::Vector2f)> getRadius, sf::Color color, std::size_t pointNum) {
     shapes.push_back(std::make_unique<ImageShape::CirclePiece>(getOriginShift, getRadius, color, pointNum));
+}
+
+void ImageShape::setRotation(sf::Angle angle) {
+    for (auto &shape : shapes) {
+        shape->setRotation(angle);
+    }
 }
