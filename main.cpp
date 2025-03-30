@@ -90,6 +90,8 @@ int main() {
         unitGrid.addUnit(std::move(barbarian));
     }
 
+    sergei.getBackground().initWallConnections();
+
     sf::Clock clock;
     while (window.isOpen()) {
         sf::Time deltaTime = clock.restart();
@@ -109,11 +111,6 @@ int main() {
         camera.setViewOn(window);
 
         window.display();
-
-        // get health stats of all the buildings
-        // for (const auto& structure : structureGrid.getStructures()) {
-        //     std::cout << structure->getHealth() << "\n";
-        // }
     }
 
     return 0;

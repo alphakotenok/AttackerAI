@@ -22,5 +22,6 @@ public:
     void remove(std::list<std::unique_ptr<Structure>>::iterator &structure);
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
     void update(sf::Time deltaTime);
+    std::optional<Structure *> getStructureAtPosition(sf::Vector2i position);
     const std::list<std::unique_ptr<Structure>> &getStructures() const;
 };

@@ -3,7 +3,7 @@
 #include "unit_grid.hpp"
 
 Sergei::Sergei(sf::Vector2i gridSize, sf::Vector2f center) {
-    bg = std::make_unique<Background>(gridSize, center);
+    bg = std::make_unique<Background>(*this, gridSize, center);
     sg = std::make_unique<StructureGrid>(*this);
     ug = std::make_unique<UnitGrid>(*this);
     bm = std::make_unique<BulletManager>();
@@ -31,6 +31,7 @@ void Sergei::update(sf::Time deltaTime) {
     sg->update(deltaTime);
     ug->update(deltaTime);
     bm->update(deltaTime);
+    bg->update(deltaTime);
 }
 
 void Sergei::draw(sf::RenderTarget &target, sf::RenderStates states) const {

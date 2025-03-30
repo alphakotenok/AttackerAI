@@ -10,6 +10,7 @@ class Tower;
 class Sergei;
 
 class Structure : public sf::Drawable {
+
 public:
     enum Type {
         WALL,
