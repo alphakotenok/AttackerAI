@@ -65,7 +65,6 @@ public:
     inline sf::Vector2i getTopLeft() { return topLeft; }
     inline sf::Vector2i getGridSize() { return Structure::getGridSize(type); }
     inline sf::Vector2f getDrawPosition() { return drawPosition; }
-    inline void setDrawPosition(sf::Vector2f drawPosition) { this->drawPosition = drawPosition; }
     inline float getHealth() { return health; }
     inline bool getToDelete() { return toDelete; }
     inline Structure::Type getType() { return type; }

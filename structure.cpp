@@ -198,6 +198,7 @@ void Structure::update(sf::Time deltaTime) {
 
 void Structure::initDraw(sf::Vector2f drawSize, sf::Vector2f position) {
     baseImage->init(drawSize, position);
+    drawPosition = position;
     if (tower) {
         tower.value()->initDraw(drawSize, position);
     }

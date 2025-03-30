@@ -22,7 +22,6 @@ bool StructureGrid::place(Structure::Type type, sf::Vector2i topLeft) {
     }
     auto structure = Structure::create(type, topLeft, bg.getStructureDrawPosition(topLeft, structureGridSize), bg.getStructureDrawSize(structureGridSize));
     structure->initDraw(bg.getStructureDrawSize(structureGridSize), bg.getStructureDrawPosition(topLeft, structureGridSize));
-    structure->setDrawPosition(bg.getStructureDrawPosition(topLeft, structureGridSize));
     structures.push_back(std::move(structure));
 
     for (int y = 0; y < structureGridSize.y; ++y) {
