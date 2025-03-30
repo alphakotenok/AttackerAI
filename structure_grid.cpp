@@ -1,9 +1,10 @@
 #include "structure_grid.hpp"
+#include "Sergei.hpp"
 #include "structure.hpp"
 #include <optional>
 
-StructureGrid::StructureGrid(Background &bg) : bg(bg) {
-    size = bg.getGridSize();
+StructureGrid::StructureGrid(Sergei &sergei) : sergei(sergei) {
+    size = sergei.getBackground().getGridSize();
     cellStructure = std::vector<std::vector<std::optional<std::list<std::unique_ptr<Structure>>::iterator>>>(
         size.y,
         std::vector<std::optional<std::list<std::unique_ptr<Structure>>::iterator>>(size.x));
@@ -20,8 +21,8 @@ bool StructureGrid::place(Structure::Type type, sf::Vector2i topLeft) {
             }
         }
     }
-    auto structure = Structure::create(type, topLeft, bg.getStructureDrawPosition(topLeft, structureGridSize), bg.getStructureDrawSize(structureGridSize));
-    structure->initDraw(bg.getStructureDrawSize(structureGridSize), bg.getStructureDrawPosition(topLeft, structureGridSize));
+    auto structure = Structure::create(type, sergei, topLeft);
+    structure->initDraw(sergei.getBackground().getStructureDrawSize(structureGridSize), sergei.getBackground().getStructureDrawPosition(topLeft, structureGridSize));
     structures.push_back(std::move(structure));
 
     for (int y = 0; y < structureGridSize.y; ++y) {

@@ -1,12 +1,13 @@
+#include "Sergei.hpp"
 #include "background.hpp"
 #include "camera.hpp"
 #include "structure.hpp"
 #include "structure_grid.hpp"
+#include "tower.hpp"
 #include "unit.hpp"
 #include "unit_grid.hpp"
 #include <SFML/Graphics.hpp>
 #include <memory>
-#include <iostream>
 
 int main() {
     sf::ContextSettings settings;
@@ -17,9 +18,12 @@ int main() {
 
     Camera camera({0, 0}, {800, 600}, sf::Mouse::getPosition(window));
 
-    Background bg({45, 45}, {0, 0});
+    Sergei sergei({45, 45}, {0, 0});
 
-    StructureGrid structureGrid(bg);
+    Background &bg = sergei.getBackground();
+
+    StructureGrid &structureGrid = sergei.getStructureGrid();
+    UnitGrid &unitGrid = sergei.getUnitGrid();
 
     structureGrid.place(Structure::BUILDERS_HUT, {10, 10});
     structureGrid.place(Structure::BUILDERS_HUT, {9, 13});
@@ -53,7 +57,7 @@ int main() {
 
     structureGrid.place(Structure::CLAN_CASTLE, {16, 17});
     structureGrid.place(Structure::MORTAR, {16, 20});
-    structureGrid.place(Structure::AIR_DEFENCE, {19, 16});
+    structureGrid.place(Structure::AIR_DEFENSE, {19, 16});
     structureGrid.place(Structure::TOWN_HALL, {19, 19});
 
     structureGrid.place(Structure::STORAGE_ELIXIR, {16, 24});
@@ -78,8 +82,6 @@ int main() {
     for (int i = 0; i < 8; ++i) structureGrid.place(Structure::WALL, {22, 18 - i});
     for (int i = 0; i < 7; ++i) structureGrid.place(Structure::WALL, {21 - i, 11});
     for (int i = 0; i < 3; ++i) structureGrid.place(Structure::WALL, {15, 12 + i});
-
-    UnitGrid unitGrid;
 
     auto barbarian1 = Unit::create(sf::Vector2f(100, 100));
     auto barbarian2 = Unit::create(sf::Vector2f(150, 100));

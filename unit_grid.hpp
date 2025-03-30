@@ -8,10 +8,12 @@
 class UnitGrid : public sf::Drawable {
 public:
     void addUnit(std::unique_ptr<Unit> unit);
-    void update(sf::Time deltaTime, const std::list<std::unique_ptr<Structure>>& structures);
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-    const std::list<std::unique_ptr<Unit>>& getUnits() const;
+    void update(sf::Time deltaTime, const std::list<std::unique_ptr<Structure>> &structures);
+    void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
+    const std::list<std::unique_ptr<Unit>> &getUnits() const;
+    std::vector<std::unique_ptr<Unit>> &getUnitsVec();
 
 private:
     std::list<std::unique_ptr<Unit>> units;
+    std::vector<std::unique_ptr<Unit>> unitsVec;
 };

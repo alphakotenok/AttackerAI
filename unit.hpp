@@ -1,16 +1,17 @@
 #pragma once
 
-#include "image_shape.hpp"
-#include "structure.hpp"
+#include "utils.hpp"
 #include <SFML/Graphics.hpp>
-#include <memory>
 #include <list>
-#include "structure_grid.hpp"
+#include <memory>
+
+class Structure;
 
 class Unit : public sf::Drawable {
 public:
     enum class Type {
-        BARBARIAN
+        BARBARIAN,
+        BALLOON
     };
 
     static std::unique_ptr<Unit> create(sf::Vector2f position);
@@ -18,24 +19,20 @@ public:
     virtual ~Unit() = default;
 
     void setTarget(sf::Vector2f target);
-    void update(sf::Time deltaTime, const std::list<std::unique_ptr<Structure>>& structures);
+    void update(sf::Time deltaTime, const std::list<std::unique_ptr<Structure>> &structures);
     void initDraw(sf::Vector2f drawSize);
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-    void attack(Structure* structure);
+    void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
+    void attack(Structure *structure);
     void takeDamage(float damage) { health -= damage; }
-    bool isDead() const { return health <= EPS; }
+    bool isDead() const { return health < EPS; }
     float getHealth() const { return health; }
     sf::Vector2f getPosition() const { return position; }
-    sf::CircleShape* getShape() const { return shape.get(); }
+    sf::CircleShape *getShape() const { return shape.get(); }
+    inline Unit::Type getType() { return type; }
 
 private:
-    float distanceTo(sf::Vector2f point) const {
-        sf::Vector2f diff = point - position;
-        return std::sqrt(diff.x * diff.x + diff.y * diff.y);
-    }
-
-    void findNearestStructure(const std::list<std::unique_ptr<Structure>>& structures);
-    bool isInRange(sf::Vector2f target) const { return distanceTo(target) <= attackRange; }
+    void findNearestStructure(const std::list<std::unique_ptr<Structure>> &structures);
+    bool isInRange(sf::Vector2f target) const { return distanceL2(target, position) <= attackRange; }
 
     sf::Vector2f position;
     sf::Vector2f drawSize;
@@ -47,6 +44,6 @@ private:
     float attackSpeed;
     float lastAttackTime;
     bool isAttacking;
-    Structure* currentTarget;
+    Structure *currentTarget;
     std::unique_ptr<sf::CircleShape> shape;
 };

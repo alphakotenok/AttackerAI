@@ -1,8 +1,8 @@
 #pragma once
 
+#include "utils.hpp"
 #include <SFML/Graphics.hpp>
 
-const float CELL_SIZE = 50.f;
 const float GRID_LINE_SIZE = 2.f;
 const sf::Color GRASS_COLOR(0, 255, 0);
 const sf::Color GRID_LINE_COLOR(20, 235, 20);

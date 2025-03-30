@@ -11,13 +11,10 @@ camera.cpp \
 background.cpp \
 structure_grid.cpp \
 structure.cpp \
-structures/wall.cpp \
-structures/cannon.cpp \
-structures/archer_tower.cpp \
-structures/mortar.cpp \
 image_shape.cpp \
 tower.cpp \
 unit.cpp \
-unit_grid.cpp
+unit_grid.cpp \
+sergei.cpp
 
 ./main

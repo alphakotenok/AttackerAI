@@ -1,9 +1,9 @@
 #include "structure.hpp"
 #include "image_shape.hpp"
+#include "tower.hpp"
+#include "unit.hpp"
 
-Structure::Structure(Structure::Type type, sf::Vector2i topLeft, sf::Vector2f drawPosition, sf::Vector2f drawSize) : type(type), topLeft(topLeft), drawPosition(drawPosition), drawSize(drawSize) {}
-
-Structure::Structure(Structure::Type type, sf::Vector2i topLeft, std::unique_ptr<ImageShape> baseImage) : type(type), topLeft(topLeft), baseImage(std::move(baseImage)) {
+Structure::Structure(Structure::Type type, Sergei &sergei, sf::Vector2i topLeft, std::unique_ptr<ImageShape> baseImage) : sergei(sergei), type(type), topLeft(topLeft), baseImage(std::move(baseImage)) {
     health = getHealth(type);
 }
 
@@ -12,7 +12,7 @@ sf::Vector2i Structure::getGridSize(Structure::Type type) {
     if (type == CANNON) return {3, 3};
     if (type == ARCHER_TOWER) return {3, 3};
     if (type == MORTAR) return {3, 3};
-    if (type == AIR_DEFENCE) return {3, 3};
+    if (type == AIR_DEFENSE) return {3, 3};
     if (type == TOWN_HALL) return {4, 4};
     if (type == CLAN_CASTLE) return {3, 3};
     if (type == STORAGE_GOLD) return {3, 3};
@@ -33,7 +33,7 @@ float Structure::getHealth(Structure::Type type) {
     if (type == CANNON) return 620;
     if (type == ARCHER_TOWER) return 500;
     if (type == MORTAR) return 450;
-    if (type == AIR_DEFENCE) return 850;
+    if (type == AIR_DEFENSE) return 850;
     if (type == TOWN_HALL) return 2100;
     if (type == CLAN_CASTLE) return 1400;
     if (type == STORAGE_GOLD) return 1700;
@@ -49,7 +49,22 @@ float Structure::getHealth(Structure::Type type) {
     return 0;
 }
 
-std::unique_ptr<Structure> Structure::create(Structure::Type type, sf::Vector2i topLeft, sf::Vector2f drawPosition, sf::Vector2f drawSize) {
+sf::Vector2f Structure::getTowerRadius(Structure::Type type) {
+    if (type == CANNON) return {0, 9};
+    if (type == ARCHER_TOWER) return {0, 10};
+    if (type == MORTAR) return {4, 11};
+    if (type == AIR_DEFENSE) return {0, 10};
+    return {0, 0};
+}
+
+bool Structure::canAttack(Structure::Type strType, Unit::Type unitType) {
+    if (unitType == Unit::Type::BALLOON) {
+        return strType == AIR_DEFENSE || strType == ARCHER_TOWER;
+    }
+    return strType != AIR_DEFENSE;
+}
+
+std::unique_ptr<Structure> Structure::create(Structure::Type type, Sergei &sergei, sf::Vector2i topLeft) {
     std::unique_ptr<ImageShape> base = std::make_unique<ImageShape>();
     std::optional<std::unique_ptr<ImageShape>> tower;
 
@@ -81,7 +96,7 @@ std::unique_ptr<Structure> Structure::create(Structure::Type type, sf::Vector2i 
         base->addCircleShape(proportional(0, 0), proportionalX(0.25f), sf::Color(90, 90, 90));
         tower.value()->addCircleShape(proportional(0, 0.1f), proportionalX(0.13f), sf::Color(30, 30, 30));
     }
-    if (type == AIR_DEFENCE) {
+    if (type == AIR_DEFENSE) {
         tower = std::make_unique<ImageShape>();
         base->addRectangleShape(proportional(0, 0), proportional(14.f / 15.f, 14.f / 15.f), sf::Color(139, 69, 19));
         base->addCircleShape(proportional(0, 0), proportionalX(0.36f), sf::Color(140, 140, 140));
@@ -171,10 +186,10 @@ std::unique_ptr<Structure> Structure::create(Structure::Type type, sf::Vector2i 
         base->addRectangleShape(proportional(0, 0), proportional(0.60f, 0.60f), sf::Color(211, 160, 59));
         base->setOutline(0, proportionalX(0.1f), sf::Color(160, 82, 45));
     }
-    auto structure = std::make_unique<Structure>(type, topLeft, std::move(base));
+    auto structure = std::make_unique<Structure>(type, sergei, topLeft, std::move(base));
     if (tower) {
         tower.value()->setRotation(sf::degrees(rand()));
-        structure->addTower(std::move(tower.value()));
+        structure->addTower(std::move(tower.value()), getTowerRadius(type), type);
     }
     return structure;
 }
@@ -204,14 +219,11 @@ void Structure::initDraw(sf::Vector2f drawSize, sf::Vector2f position) {
     }
 }
 
-void Structure::addTower(std::unique_ptr<ImageShape> image) {
-    tower = std::make_unique<Tower>(std::move(image));
+void Structure::addTower(std::unique_ptr<ImageShape> image, sf::Vector2f radius, Type type) {
+    assert(radius.x <= radius.y);
+    tower = std::make_unique<Tower>(std::move(image), sergei, radius.x, radius.y, type);
 }
 
 void Structure::takeDamage(float damage) {
     health -= damage;
-    if (health <= 0) {
-        health = 0;
-        toDelete = true;
-    }
 }

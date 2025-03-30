@@ -2,8 +2,6 @@
 #include "structure.hpp"
 #include "utils.hpp"
 #include <cmath>
-#include <algorithm>
-#include <iostream>
 
 std::unique_ptr<Unit> Unit::create(sf::Vector2f position) {
     return std::make_unique<Unit>(position);
@@ -11,7 +9,7 @@ std::unique_ptr<Unit> Unit::create(sf::Vector2f position) {
 
 Unit::Unit(sf::Vector2f position)
     : position(position), isAttacking(false), type(Type::BARBARIAN), currentTarget(nullptr) {
-    
+
     if (type == Type::BARBARIAN) {
         speed = 100;
         health = 100;
@@ -27,15 +25,15 @@ Unit::Unit(sf::Vector2f position)
     }
 }
 
-void Unit::update(sf::Time deltaTime, const std::list<std::unique_ptr<Structure>>& structures) {
+void Unit::update(sf::Time deltaTime, const std::list<std::unique_ptr<Structure>> &structures) {
     if (!currentTarget || currentTarget->isDead()) {
         findNearestStructure(structures);
     }
 
     if (currentTarget) {
         sf::Vector2f targetPos = currentTarget->getDrawPosition();
-        float distToTarget = distanceTo(targetPos);
-        
+        float distToTarget = distanceL2(position, targetPos);
+
         if (distToTarget <= attackRange) {
             if (!isAttacking) {
                 currentTarget->takeDamage(damage);
@@ -65,14 +63,14 @@ void Unit::update(sf::Time deltaTime, const std::list<std::unique_ptr<Structure>
     shape->setPosition(position);
 }
 
-void Unit::findNearestStructure(const std::list<std::unique_ptr<Structure>>& structures) {
+void Unit::findNearestStructure(const std::list<std::unique_ptr<Structure>> &structures) {
     float minDist = std::numeric_limits<float>::max();
-    Structure* nearest = nullptr;
+    Structure *nearest = nullptr;
 
-    for (const auto& structure : structures) {
+    for (const auto &structure : structures) {
         if (!structure || structure->isDead()) continue;
-        
-        float dist = distanceTo(structure->getDrawPosition());
+
+        float dist = distanceL2(position, structure->getDrawPosition());
         if (dist < minDist) {
             minDist = dist;
             nearest = structure.get();
@@ -87,18 +85,18 @@ void Unit::initDraw(sf::Vector2f drawSize) {
     shape->setRadius(drawSize.x * 0.5f);
 }
 
-void Unit::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+void Unit::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     if (shape) {
         target.draw(*shape, states);
     }
 }
 
-void Unit::attack(Structure* structure) {
+void Unit::attack(Structure *structure) {
     if (!structure || structure->isDead()) return;
 
     sf::Vector2f structurePos = structure->getDrawPosition();
-    float distToTarget = distanceTo(structurePos);
-    
+    float distToTarget = distanceL2(position, structurePos);
+
     if (distToTarget <= attackRange) {
         if (!isAttacking) {
             structure->takeDamage(damage);
@@ -111,7 +109,7 @@ void Unit::attack(Structure* structure) {
         float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
         if (length > 0) {
             direction = direction / length;
-            position += direction * speed / 60.0f; 
+            position += direction * speed / 60.0f;
             shape->setPosition(position);
             shape->setFillColor(sf::Color::Red);
         }

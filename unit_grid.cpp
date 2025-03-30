@@ -1,29 +1,26 @@
 #include "unit_grid.hpp"
 #include "unit.hpp"
-#include <algorithm>
 
 void UnitGrid::addUnit(std::unique_ptr<Unit> unit) {
-    units.push_back(std::move(unit));
+    unitsVec.push_back(std::move(unit));
 }
 
-void UnitGrid::update(sf::Time deltaTime, const std::list<std::unique_ptr<Structure>>& structures) {
-    
-    for (auto& unit : units) {
-        unit->update(deltaTime, structures);
-    }
-
-    units.erase(
-        std::remove_if(units.begin(), units.end(),
-            [](const std::unique_ptr<Unit>& unit) { return unit->isDead(); }),
-        units.end());
-}
-
-void UnitGrid::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-    for (const auto& unit : units) {
-        target.draw(*unit, states);
+void UnitGrid::update(sf::Time deltaTime, const std::list<std::unique_ptr<Structure>> &structures) {
+    for (auto &unit : unitsVec) {
+        if (!unit->isDead()) unit->update(deltaTime, structures);
     }
 }
 
-const std::list<std::unique_ptr<Unit>>& UnitGrid::getUnits() const {
+void UnitGrid::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+    for (const auto &unit : unitsVec) {
+        if (!unit->isDead()) target.draw(*unit, states);
+    }
+}
+
+const std::list<std::unique_ptr<Unit>> &UnitGrid::getUnits() const {
     return units;
+}
+
+std::vector<std::unique_ptr<Unit>> &UnitGrid::getUnitsVec() {
+    return unitsVec;
 }

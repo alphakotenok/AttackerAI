@@ -1,11 +1,11 @@
 #pragma once
 
 #include "image_shape.hpp"
-#include "tower.hpp"
-#include <SFML/Graphics.hpp>
-#include <memory>
-#include <vector>
+#include "unit.hpp"
 #include "utils.hpp"
+#include <SFML/Graphics.hpp>
+
+class Tower;
 
 inline auto proportional(float a, float b) {
     return [a, b](sf::Vector2f pair) { return sf::Vector2f{pair.x * a, pair.y * b}; };
@@ -19,6 +19,8 @@ inline auto proportionalY(float a) {
     return [a](sf::Vector2f pair) { return pair.y * a; };
 }
 
+class Sergei;
+
 class Structure : public sf::Drawable {
 public:
     enum Type {
@@ -26,7 +28,7 @@ public:
         CANNON,
         ARCHER_TOWER,
         MORTAR,
-        AIR_DEFENCE,
+        AIR_DEFENSE,
         TOWN_HALL,
         CLAN_CASTLE,
         STORAGE_GOLD,
@@ -49,6 +51,8 @@ protected:
     sf::Vector2f drawPosition;
     sf::Vector2f drawSize;
 
+    Sergei &sergei;
+
     std::unique_ptr<ImageShape> baseImage;
     std::optional<std::unique_ptr<Tower>> tower;
 
@@ -57,10 +61,11 @@ protected:
 public:
     static sf::Vector2i getGridSize(Structure::Type type);
     static float getHealth(Structure::Type type);
-    static std::unique_ptr<Structure> create(Structure::Type type, sf::Vector2i topLeft, sf::Vector2f drawPosition, sf::Vector2f drawSize);
+    static sf::Vector2f getTowerRadius(Structure::Type type);
+    static std::unique_ptr<Structure> create(Structure::Type type, Sergei &sergei, sf::Vector2i topLeft);
+    static bool canAttack(Structure::Type strType, Unit::Type unitType);
 
-    Structure(Structure::Type type, sf::Vector2i topLeft, sf::Vector2f drawPosition, sf::Vector2f drawSize);
-    Structure(Structure::Type type, sf::Vector2i topLeft, std::unique_ptr<ImageShape> baseImage);
+    Structure(Structure::Type type, Sergei &sergei, sf::Vector2i topLeft, std::unique_ptr<ImageShape> baseImage);
     inline sf::Vector2i getTopLeft() { return topLeft; }
     inline sf::Vector2i getGridSize() { return Structure::getGridSize(type); }
     inline sf::Vector2f getDrawPosition() { return drawPosition; }
@@ -71,6 +76,6 @@ public:
     virtual void update(sf::Time deltaTime);
     void initDraw(sf::Vector2f drawSize, sf::Vector2f position);
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
-    void addTower(std::unique_ptr<ImageShape> image);
-    bool isDead() const { return health <= 0; }
+    void addTower(std::unique_ptr<ImageShape> image, sf::Vector2f radius, Type type);
+    bool isDead() const { return health < EPS; }
 };
