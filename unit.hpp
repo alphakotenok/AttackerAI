@@ -22,7 +22,8 @@ public:
     void initDraw(sf::Vector2f drawSize);
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
     void attack(Structure* structure);
-    bool isDead() const { return health <= 0; }
+    void takeDamage(float damage);
+    bool isDead() const { return health <= EPS; }
     float getHealth() const { return health; }
     sf::Vector2f getPosition() const { return position; }
     sf::CircleShape* getShape() const { return shape.get(); }

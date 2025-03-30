@@ -5,8 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 #include <vector>
-
-const float EPS = 1e-4;
+#include "utils.hpp"
 
 inline auto proportional(float a, float b) {
     return [a, b](sf::Vector2f pair) { return sf::Vector2f{pair.x * a, pair.y * b}; };

@@ -1,5 +1,6 @@
 #include "unit.hpp"
 #include "structure.hpp"
+#include "utils.hpp"
 #include <cmath>
 #include <algorithm>
 #include <iostream>
@@ -27,7 +28,6 @@ Unit::Unit(sf::Vector2f position)
 }
 
 void Unit::update(sf::Time deltaTime, const std::list<std::unique_ptr<Structure>>& structures) {
-    
     if (!currentTarget || currentTarget->isDead()) {
         findNearestStructure(structures);
     }
@@ -115,5 +115,12 @@ void Unit::attack(Structure* structure) {
             shape->setPosition(position);
             shape->setFillColor(sf::Color::Red);
         }
+    }
+}
+
+void Unit::takeDamage(float damage) {
+    health -= damage;
+    if (health <= EPS) {
+        isDead = true;
     }
 }
