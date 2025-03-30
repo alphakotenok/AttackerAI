@@ -117,10 +117,3 @@ void Unit::attack(Structure* structure) {
         }
     }
 }
-
-void Unit::takeDamage(float damage) {
-    health -= damage;
-    if (health <= EPS) {
-        isDead = true;
-    }
-}
