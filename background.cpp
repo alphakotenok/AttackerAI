@@ -55,7 +55,6 @@ void Background::initWallConnections() {
                 connection->shape.setOrigin(connection->shape.getGeometricCenter());
                 connection->shape.setPosition(getStructureDrawPosition({i, j}, {2, 1}));
                 wallConnections.push_back(std::move(connection));
-                std::cout << i << ' ' << j << std::endl;
             }
         }
     }

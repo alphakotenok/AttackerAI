@@ -44,11 +44,12 @@ void Unit::update(sf::Time deltaTime, const std::list<std::unique_ptr<Structure>
                 shape->setFillColor(sf::Color::Yellow);
             }
         } else {
-            sf::Vector2f direction = targetPos - position;
+            sf::Vector2f direction = (sf::Vector2f{path.back()} * CELL_SIZE / 5.0f - sf::Vector2f{1125.0f, 1125.0f}) - position;
+            path.pop_back();
             float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
             if (length > 0) {
                 direction = direction / length;
-                position += direction * speed * deltaTime.asSeconds();
+                position += direction * speed / 60.0f;
                 shape->setPosition(position);
                 shape->setFillColor(sf::Color::Red);
             }
@@ -90,7 +91,6 @@ inline sf::Vector2i fromGameToDijkstraCoords(sf::Vector2f position) {
     return {static_cast<int>(position.x * 5), static_cast<int>(position.y * 5)};
 }
 
-
 inline sf::Vector2f fromDijkstraToGameCoords(std::pair<int, int> coords) {
     return {static_cast<float>(coords.first) / 5.0f, static_cast<float>(coords.second) / 5.0f};
 }
@@ -101,16 +101,17 @@ void Unit::findNearestStructure(const std::list<std::unique_ptr<Structure>> &str
 
     const sf::Vector2i gridSize = {45, 45};
 
-    std::vector<std::vector<Structure*>> structMap(gridSize.x * 5, std::vector<Structure*>(gridSize.y * 5, nullptr));
-    
+    std::vector<std::vector<Structure *>> structMap(gridSize.x * 5, std::vector<Structure *>(gridSize.y * 5, nullptr));
 
     for (const auto &structure : structures) {
         if (!structure || structure->isDead()) continue;
 
-        auto dijkstraCoords = fromGameToDijkstraCoords((structure->getDrawPosition() + sf::Vector2f{1125.0f, 1125.0f}) / CELL_SIZE);
-        // std::cout << structure->getTopLeft().x << " " << structure->getTopLeft().y << "\n";
-        for (int dx = 0; dx < 5; ++dx) {
-            for (int dy = 0; dy < 5; ++dy) {
+        auto dijkstraCoords = fromGameToDijkstraCoords(structure->getTopLeft());
+        auto structSize = structure->getGridSize();
+        // std::cout << structSize.x << structSize.y << std::endl;
+        //  std::cout << structure->getTopLeft().x << " " << structure->getTopLeft().y << "\n";
+        for (int dx = 0; dx < 5 * structSize.x; ++dx) {
+            for (int dy = 0; dy < 5 * structSize.y; ++dy) {
                 structMap[dijkstraCoords.x + dx][dijkstraCoords.y + dy] = structure.get();
             }
         }
@@ -122,7 +123,7 @@ void Unit::findNearestStructure(const std::list<std::unique_ptr<Structure>> &str
     // std::cout << posToStart.x << " " << posToStart.y << "\n";
     distMap[posToStart.x][posToStart.y] = 0;
 
-    auto compare = [](const std::pair<int, sf::Vector2i>& a, const std::pair<int, sf::Vector2i>& b) { return a.first > b.first; };
+    auto compare = [](const std::pair<int, sf::Vector2i> &a, const std::pair<int, sf::Vector2i> &b) { return a.first > b.first; };
     std::priority_queue<std::pair<int, sf::Vector2i>, std::vector<std::pair<int, sf::Vector2i>>, decltype(compare)> q(compare);
     q.push({0, posToStart});
 
@@ -137,7 +138,7 @@ void Unit::findNearestStructure(const std::list<std::unique_ptr<Structure>> &str
         for (int dx = -1; dx <= 1; ++dx) {
             for (int dy = -1; dy <= 1; ++dy) {
                 if (dx == 0 && dy == 0) continue;
-                
+
                 if (coords.x + dx < 0 || coords.x + dx >= gridSize.x * 5 ||
                     coords.y + dy < 0 || coords.y + dy >= gridSize.y * 5) {
                     continue;
@@ -185,6 +186,7 @@ void Unit::findNearestStructure(const std::list<std::unique_ptr<Structure>> &str
 void Unit::initDraw(sf::Vector2f drawSize) {
     this->drawSize = drawSize;
     shape->setRadius(drawSize.x * 0.5f);
+    shape->setOrigin(shape->getGeometricCenter());
 }
 
 void Unit::draw(sf::RenderTarget &target, sf::RenderStates states) const {
