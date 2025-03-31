@@ -153,16 +153,33 @@ void Unit::findNearestStructure(const std::list<std::unique_ptr<Structure>> &str
         }
     }
 
+    sf::Vector2i attackCell = {-1, -1};
     for (int i = 0; i < gridSize.x * 5; ++i) {
         for (int j = 0; j < gridSize.y * 5; ++j) {
             if (distMap[i][j] < minDist && structMap[i][j] != nullptr) {
                 minDist = distMap[i][j];
                 nearest = structMap[i][j];
+                attackCell = {i, j};
             }
         }
     }
 
     currentTarget = nearest;
+
+    path.clear();
+    if (currentTarget) {
+        while (attackCell != posToStart) {
+            path.push_back(attackCell);
+            for (int dx = -1; dx <= 1; ++dx) {
+                for (int dy = -1; dy <= 1; ++dy) {
+                    if (distMap[attackCell.x + dx][attackCell.y + dy] < distMap[attackCell.x][attackCell.y]) {
+                        attackCell = {attackCell.x + dx, attackCell.y + dy};
+                    }
+                }
+            }
+        }
+        // std::reverse(path.begin(), path.end());
+    }
 }
 
 void Unit::initDraw(sf::Vector2f drawSize) {
@@ -190,7 +207,8 @@ void Unit::attack(Structure *structure) {
             shape->setFillColor(sf::Color::Yellow);
         }
     } else {
-        sf::Vector2f direction = structurePos - position;
+        sf::Vector2f direction = (sf::Vector2f{path.back()} * CELL_SIZE / 5.0f - sf::Vector2f{1125.0f, 1125.0f}) - position;
+        path.pop_back();
         float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
         if (length > 0) {
             direction = direction / length;

@@ -46,4 +46,6 @@ private:
     bool isAttacking;
     Structure *currentTarget;
     std::unique_ptr<sf::CircleShape> shape;
+    std::vector<sf::Vector2i> path;
 };
+
