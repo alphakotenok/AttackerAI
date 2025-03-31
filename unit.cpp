@@ -2,6 +2,8 @@
 #include "structure.hpp"
 #include "utils.hpp"
 #include <cmath>
+#include <iostream>
+#include <queue>
 
 std::unique_ptr<Unit> Unit::create(sf::Vector2f position) {
     return std::make_unique<Unit>(position);
@@ -63,17 +65,100 @@ void Unit::update(sf::Time deltaTime, const std::list<std::unique_ptr<Structure>
     shape->setPosition(position);
 }
 
+// void Unit::findNearestStructure(const std::list<std::unique_ptr<Structure>> &structures) {
+//     float minDist = std::numeric_limits<float>::max();
+//     Structure *nearest = nullptr;
+
+//     for (const auto &structure : structures) {
+//         if (!structure || structure->isDead()) continue;
+
+//         float dist = distanceL2(position, structure->getDrawPosition());
+//         if (dist < minDist) {
+//             minDist = dist;
+//             nearest = structure.get();
+//         }
+//     }
+
+//     currentTarget = nearest;
+// }
+
+inline sf::Vector2i fromGameToDijkstraCoords(sf::Vector2i position) {
+    return {position.x * 5, position.y * 5};
+}
+
+inline sf::Vector2i fromGameToDijkstraCoords(sf::Vector2f position) {
+    return {static_cast<int>(position.x * 5), static_cast<int>(position.y * 5)};
+}
+
+
+inline sf::Vector2f fromDijkstraToGameCoords(std::pair<int, int> coords) {
+    return {static_cast<float>(coords.first) / 5.0f, static_cast<float>(coords.second) / 5.0f};
+}
+
 void Unit::findNearestStructure(const std::list<std::unique_ptr<Structure>> &structures) {
-    float minDist = std::numeric_limits<float>::max();
+    int minDist = std::numeric_limits<int>::max();
     Structure *nearest = nullptr;
+
+    const sf::Vector2i gridSize = {45, 45};
+
+    std::vector<std::vector<Structure*>> structMap(gridSize.x * 5, std::vector<Structure*>(gridSize.y * 5, nullptr));
+    
 
     for (const auto &structure : structures) {
         if (!structure || structure->isDead()) continue;
 
-        float dist = distanceL2(position, structure->getDrawPosition());
-        if (dist < minDist) {
-            minDist = dist;
-            nearest = structure.get();
+        auto dijkstraCoords = fromGameToDijkstraCoords((structure->getDrawPosition() + sf::Vector2f{1125.0f, 1125.0f}) / CELL_SIZE);
+        // std::cout << structure->getTopLeft().x << " " << structure->getTopLeft().y << "\n";
+        for (int dx = 0; dx < 5; ++dx) {
+            for (int dy = 0; dy < 5; ++dy) {
+                structMap[dijkstraCoords.x + dx][dijkstraCoords.y + dy] = structure.get();
+            }
+        }
+    }
+
+    std::vector<std::vector<int>> distMap(gridSize.x * 5, std::vector<int>(gridSize.y * 5, std::numeric_limits<int>::max()));
+    // std::cout << position.x << " " << position.y << "\n";
+    auto posToStart = fromGameToDijkstraCoords((position + sf::Vector2f{1125.0f, 1125.0f}) / CELL_SIZE);
+    // std::cout << posToStart.x << " " << posToStart.y << "\n";
+    distMap[posToStart.x][posToStart.y] = 0;
+
+    auto compare = [](const std::pair<int, sf::Vector2i>& a, const std::pair<int, sf::Vector2i>& b) { return a.first > b.first; };
+    std::priority_queue<std::pair<int, sf::Vector2i>, std::vector<std::pair<int, sf::Vector2i>>, decltype(compare)> q(compare);
+    q.push({0, posToStart});
+
+    while (!q.empty()) {
+        auto [dist, coords] = q.top();
+        q.pop();
+
+        if (dist == std::numeric_limits<int>::max()) break;
+
+        if (dist > distMap[coords.x][coords.y]) continue;
+
+        for (int dx = -1; dx <= 1; ++dx) {
+            for (int dy = -1; dy <= 1; ++dy) {
+                if (dx == 0 && dy == 0) continue;
+                
+                if (coords.x + dx < 0 || coords.x + dx >= gridSize.x * 5 ||
+                    coords.y + dy < 0 || coords.y + dy >= gridSize.y * 5) {
+                    continue;
+                }
+
+                int newDist = dist + 1;
+
+                if (newDist < distMap[coords.x + dx][coords.y + dy]) {
+                    distMap[coords.x + dx][coords.y + dy] = newDist;
+                    q.push({newDist, {coords.x + dx, coords.y + dy}});
+                }
+            }
+        }
+    }
+
+    for (int i = 0; i < gridSize.x * 5; ++i) {
+        for (int j = 0; j < gridSize.y * 5; ++j) {
+            if (distMap[i][j] < minDist && structMap[i][j] != nullptr) {
+                minDist = distMap[i][j];
+                nearest = structMap[i][j];
+            }
         }
     }
 
